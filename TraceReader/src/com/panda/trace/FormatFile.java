@@ -1,75 +1,80 @@
 package com.panda.trace;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class FormatFile {
-	//
-	private String version;
-	private int versioncode;
-	private boolean overflow;
-	private String clock;
-	private long elapsedTime;
-	private int methodNum;
-	private int clockCallOverhead;
-	private String vm;
-	Map<String,String> threads=new HashMap<String, String>();
-	Map<Long,MethodDes> methods=new HashMap<Long,MethodDes>();
-	public Map getMethods() {
-		return methods;
-	}
-	public void setMethods(Map methods) {
-		this.methods = methods;
-	}
-	public String getVersion() {
-		return version;
-	}
-	public void setVersion(String version) {
-		this.version = version;
-	}
-	public int getVersioncode() {
-		return versioncode;
-	}
-	public void setVersioncode(int versioncode) {
-		this.versioncode = versioncode;
-	}
-	public boolean isOverflow() {
-		return overflow;
-	}
-	public void setOverflow(boolean overflow) {
-		this.overflow = overflow;
-	}
-	public String getClock() {
-		return clock;
-	}
-	public void setClock(String clock) {
-		this.clock = clock;
-	}
-	public long getElapsedTime() {
-		return elapsedTime;
-	}
-	public void setElapsedTime(long elapsedTime) {
-		this.elapsedTime = elapsedTime;
-	}
-	public int getMethodNum() {
-		return methodNum;
-	}
-	public void setMethodNum(int methodNum) {
-		this.methodNum = methodNum;
-	}
-	public int getClockCallOverhead() {
-		return clockCallOverhead;
-	}
-	public void setClockCallOverhead(int clockCallOverhead) {
-		this.clockCallOverhead = clockCallOverhead;
-	}
-	public String getVm() {
-		return vm;
-	}
-	public void setVm(String vm) {
-		this.vm = vm;
-	}
+
+    private final VersionSection versionSection = new VersionSection();
+    Map<String, String> threads = new HashMap<String, String>();
+    Map<Long, MethodDes> methods = new HashMap<Long, MethodDes>();
+
+    public Map getMethods() {
+        return methods;
+    }
+
+    public void setMethods(Map methods) {
+        this.methods = methods;
+    }
+
+    public void setVersion(String version) {
+        versionSection.setVersion(version);
+    }
+
+    public int getVersioncode() {
+        return versionSection.getVersioncode();
+    }
+
+    public void setVersioncode(int versioncode) {
+        versionSection.setVersioncode(versioncode);
+    }
+
+    public boolean isOverflow() {
+        return versionSection.isOverflow();
+    }
+
+    public void setOverflow(boolean overflow) {
+        versionSection.setOverflow(overflow);
+    }
+
+    public String getClock() {
+        return versionSection.getClock();
+    }
+
+    public void setClock(String clock) {
+        versionSection.setClock(clock);
+    }
+
+    public long getElapsedTime() {
+        return versionSection.getElapsedTime();
+    }
+
+    public void setElapsedTime(long elapsedTime) {
+        versionSection.setElapsedTime(elapsedTime);
+    }
+
+    public int getMethodNum() {
+        return versionSection.getMethodNum();
+    }
+
+    public void setMethodNum(int methodNum) {
+        versionSection.setMethodNum(methodNum);
+    }
+
+    public int getClockCallOverhead() {
+        return versionSection.getClockCallOverhead();
+    }
+
+    public void setClockCallOverhead(int clockCallOverhead) {
+        versionSection.setClockCallOverhead(clockCallOverhead);
+    }
+
+    public String getVm() {
+        return versionSection.getVm();
+    }
+
+    public void setVm(String vm) {
+        versionSection.setVm(vm);
+    }
 
 }

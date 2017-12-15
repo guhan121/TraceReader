@@ -1,17 +1,7 @@
 package com.panda.ui.list;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import javax.swing.AbstractListModel;
-import javax.swing.JLabel;
-import javax.swing.JList;
 
-import com.panda.trace.ThreadList;
-import com.panda.trace.TraceThread;
 import com.panda.ui.TraceFrame;
 
 @SuppressWarnings("serial")
@@ -26,7 +16,7 @@ public class ThreadJListModel extends AbstractListModel{
 	}
 	public ThreadJListModel(TraceFrame trf){
 		this.trf=trf;
-//		System.out.println(trf.getTraceThreads().names.size());
+//		System.out.println(trf.getTraceThreads().threadId_List.size());
 	}
 	@Override
 	public int getSize() {
@@ -34,7 +24,7 @@ public class ThreadJListModel extends AbstractListModel{
 		if(trf.getTraceThreads()==null){
 			return 0;
 		}
-		return trf.getTraceThreads().names.size();
+		return trf.getTraceThreads().threadId_List.size();
 	}
 
 	@Override
@@ -43,9 +33,9 @@ public class ThreadJListModel extends AbstractListModel{
 		if(trf.getTraceThreads()==null){
 			return null;
 		}
-		String name=trf.getTraceThreads().names.get(index)+"\t"
-				+trf.getTraceThreads().getThreads().get(trf.getTraceThreads().names.get(index)).getName()+"("+
-				trf.getTraceThreads().getThreads().get(trf.getTraceThreads().names.get(index)).getMethods().size()+")";
+		String name=trf.getTraceThreads().threadId_List.get(index)+"\t"
+				+trf.getTraceThreads().getThreadId_thread_map().get(trf.getTraceThreads().threadId_List.get(index)).getCurrentName()+"("+
+				trf.getTraceThreads().getThreadId_thread_map().get(trf.getTraceThreads().threadId_List.get(index)).getMethodLogs().size()+")";
 		//JLabel label=new JLabel(name);
 		return name;
 	}

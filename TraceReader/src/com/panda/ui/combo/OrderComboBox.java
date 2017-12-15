@@ -24,8 +24,8 @@ public class OrderComboBox extends JComboBox implements ItemListener{
 			return;
 		}
 		if(this.getSelectedItem().toString().equals("线程列表")){
-			// List<Map.Entry<String,TraceThread>> list = new ArrayList<Map.Entry<String,TraceThread>>(traceThreads.getThreads().entrySet());
-			 Collections.sort(frame.getTraceThreads().names,new Comparator<String>() {
+			// List<Map.Entry<String,TraceThread>> list = new ArrayList<Map.Entry<String,TraceThread>>(traceThreads.getThreadId_thread_map().entrySet());
+			 Collections.sort(frame.getTraceThreads().threadId_List,new Comparator<String>() {
 					@Override
 					public int compare(String o1, String o2) {
 						// TODO Auto-generated method stub
@@ -38,12 +38,12 @@ public class OrderComboBox extends JComboBox implements ItemListener{
 		    	// model.
 		     }
 		}else if(this.getSelectedItem().toString().equals("方法列表")){
-			//List<Map.Entry<String,TraceThread>> list = new ArrayList<Map.Entry<String,TraceThread>>(traceThreads.getThreads().entrySet());
-		     Collections.sort(frame.getTraceThreads().names,new Comparator<String>() {
+			//List<Map.Entry<String,TraceThread>> list = new ArrayList<Map.Entry<String,TraceThread>>(traceThreads.getThreadId_thread_map().entrySet());
+		     Collections.sort(frame.getTraceThreads().threadId_List,new Comparator<String>() {
 					@Override
 					public int compare(String o1, String o2) {
 						// TODO Auto-generated method stub
-						return frame.getTraceThreads().getThreads().get(o2).getMethods().size()-frame.getTraceThreads().getThreads().get(o1).getMethods().size();
+						return frame.getTraceThreads().getThreadId_thread_map().get(o2).getMethodLogs().size()-frame.getTraceThreads().getThreadId_thread_map().get(o1).getMethodLogs().size();
 					}
 		            
 		      });

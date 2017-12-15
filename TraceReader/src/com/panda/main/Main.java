@@ -1,20 +1,14 @@
 package com.panda.main;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-
-import com.panda.trace.MethodLog;
 import com.panda.ui.TraceFrame;
 
 public class Main {
 
-	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-		TraceFrame fm=new TraceFrame();
-		
-		//System.out.print(fl.length())
+    public static void main(String[] args) throws Exception {
+        // TODO Auto-generated method stub
+        TraceFrame fm = new TraceFrame();
+
+        //System.out.print(fl.length())
 //		byte[] bytes=BytesHelper.toByteArray("./test.trace");
 //		Trace trace=new Trace(bytes);
 //		Threads srm=new Threads(trace);
@@ -61,7 +55,7 @@ public class Main {
 //		System.out.println(srm.methods.get(2).methodName+" "+srm.methods.get(2).record.threadClockDiff);
 //		System.out.println(srm.methods.get(3).methodName+" "+srm.methods.get(3).record.threadClockDiff);
 //		System.out.println(srm.methods.get(srm.methods.size()-1).methodName+" "+srm.methods.get(srm.methods.size()-1).record.threadClockDiff);
-		
-	}
+
+    }
 
 }

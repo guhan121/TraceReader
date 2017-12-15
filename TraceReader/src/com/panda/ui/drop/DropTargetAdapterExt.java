@@ -54,8 +54,8 @@ public class DropTargetAdapterExt extends DropTargetAdapter{
 							//System.out.println(current1-current);
 							//System.out.println(current2-current1);
 							//threadList.
-							((TraceFrame)frame).updateUI();;
-							
+							((TraceFrame)frame).updateUI();
+
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
