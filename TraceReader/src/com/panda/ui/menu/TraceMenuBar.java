@@ -21,7 +21,7 @@ public class TraceMenuBar extends JMenuBar{
 	JFrame frame;
 	private JMenu menu1, menu2, menu3, menu4, menu5;
 	private JMenuItem it1,it2;
-	final String VERSION ="V 1.1";
+	final String VERSION ="V 1.2";
 	final String HELP="	使用方法：\r\n1.拖拽文件到界面，会自动解析trace文件；\r\n"
 								+ "2.双击某个线程名称，会以树形界面显示调用堆栈；\r\n"
 								+ "3.查找框支持对某些字符串查找；\r\n"

@@ -81,18 +81,22 @@ public class CallStackTree extends JTree {
         treeModel.reload();
     }
 
-    public void extendTreeMode(String reg) {
-        if (mtReg.equals(reg)) {
+    /**
+     * 展开特定的对象
+     * @param keyWord
+     */
+    public void extendTreeMode(String keyWord) {
+        if (mtReg.equals(keyWord)) {
             times++;
         } else {
-            mtReg = reg;
+            mtReg = keyWord;
             times = 1;
         }
         int n = times;
         Enumeration<CallStackNode> enums = ROOT.preorderEnumeration();
         while (enums.hasMoreElements() && n > 0) {
             CallStackNode node = (CallStackNode) enums.nextElement();
-            if (node.getText().contains(reg)) {
+            if (node.getText().contains(keyWord)) {
                 this.addSelectionPath(new TreePath(node.getPath()));
                 n--;
             }

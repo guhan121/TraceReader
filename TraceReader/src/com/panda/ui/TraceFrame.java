@@ -219,16 +219,16 @@ public class TraceFrame extends JFrame {
         }
     }
 
-    public void evalSearch(String reg) {
+    public void evalSearch(String keyWord) {
         if (tabbedPane.getSelectedIndex() == 0) {
-            if (reg == "") {
+            if (keyWord == "") {
                 return;
             }
-            ((CallStackTree) callstackTree).extendTreeMode(reg);
+            ((CallStackTree) callstackTree).extendTreeMode(keyWord);
             return;
         }
         if (tabbedPane.getSelectedIndex() == 1) {
-            ((MethodsExtendTree) mTree).reloadMMode(0, reg);
+            ((MethodsExtendTree) mTree).reloadMMode(0, keyWord);
             return;
         }
     }

@@ -38,6 +38,14 @@ public class CallStackRender extends DefaultTreeCellRenderer {
 //    	   JLabel l=new JLabel(time);
 //    	   l.setForeground(Color.BLACK);
 //       }
+
+        if (selected) {
+            setForeground(Color.RED);
+//            setBackground(Color.LIGHT_GRAY);
+        } else {
+            setForeground(Color.black);
+//            setBackground(new Color(184,207,229));
+        }
         return this;
     }
 }
