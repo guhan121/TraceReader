@@ -20,6 +20,7 @@ public class ThreadMouseAdapter extends MouseAdapter {
         pop = new ThreadListPopupMenu(thread);
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
 
         // TODO Auto-generated method stub
@@ -28,7 +29,7 @@ public class ThreadMouseAdapter extends MouseAdapter {
                 return;
             }
             String selectedId = thread.getSelectedId();
-            System.out.println("请求线程显示:" + selectedId);
+//            System.out.println("请求线程显示:" + selectedId);
             frame.extendMethod(selectedId, thread.getModel().getFilter());
             //全局记录该id
             DisplayHelper.SelectedThreadId = selectedId;

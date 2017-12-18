@@ -1,5 +1,16 @@
 package com.panda.trace;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 //File format:
 //header
 //record 0
@@ -36,13 +47,21 @@ package com.panda.trace;
 //copy from android 4.4
 public class Trace {
 
+    private static Trace instance;
+    final Pattern patternMothod = Pattern.compile("^\\s+(.*\\))\\s->\\s(.*)$");
+    final Pattern patternClass = Pattern.compile("^(.*)\\s->\\s(.*):$");
     FormatFile fmFile;
     ThreadList threadList;
     TraceSection traceSection;
 
+    private Trace() {
+    }
 
-    public Trace(byte[] bytes) {
-        divideBytes(bytes);
+    public static synchronized Trace getInstance() {
+        if (instance == null) {
+            instance = new Trace();
+        }
+        return instance;
     }
 
     public ThreadList getThreadList() {
@@ -73,27 +92,27 @@ public class Trace {
             TraceRecord r = new TraceRecord();
             r.threadId = BytesHelper.read2LE(data, offset);
             value = BytesHelper.read4LE(data, offset + 2);
-            r.methodValue = TraceAction.decodeMethodValue(value);
+            r.methodId = TraceAction.decodeMethodValue(value);
             r.threadClockDiff = BytesHelper.read4LE(data, offset + 6);
             if (traceSection.header.record_size == 14) {
                 r.wallClockDiff = BytesHelper.read4LE(data, offset + 10);
             }
-            r.m = fmFile.methods.get(r.methodValue);
+            MethodDes m1 = fmFile.methods.get(r.methodId);
             r.action = TraceAction.decodeAction(value);
             traceSection.records.add(r);
             MethodLog ml;
-            if (r.m == null) {
-                ml = new MethodLog("0x" + Long.toHexString(r.methodValue), r.action);
+            if (m1 == null) {
+                ml = new MethodLog("0x" + Long.toHexString(r.methodId), r.action);
             } else {
-                ml = new MethodLog(r);
+                ml = new MethodLog(r, m1);
             }
 
             /**
              * 记录所有的线程记录
              */
-            if (!localThreadList.recFullName_TraceRec_Map.containsKey(ml.record.m.getFullName())) {
+            if (!localThreadList.recFullName_TraceRec_Map.containsKey(ml.getMethodDes().getFullName())) {
                 TraceRecord rd = ml.record;
-                localThreadList.recFullName_TraceRec_Map.put(ml.record.m.getFullName(), rd);
+                localThreadList.recFullName_TraceRec_Map.put(ml.getMethodDes().getFullName(), rd);
             }
 
 
@@ -115,7 +134,7 @@ public class Trace {
             offset = offset + traceSection.header.record_size;
         }
         long current1 = System.currentTimeMillis();
-        System.out.println(current1 - current);
+//        System.out.println(current1 - current);
         localThreadList.sort();
         this.threadList = localThreadList;
     }
@@ -131,6 +150,11 @@ public class Trace {
         return fmFile.threads.get(ml.getRecord().threadId + "");
     }
 
+    /**
+     * 读取前三段内容
+     *
+     * @param format
+     */
     private void readFileFormat(String format) {
         String[] lists = format.split("\n");
         fmFile = new FormatFile();
@@ -163,7 +187,7 @@ public class Trace {
             String params[] = lists[offset].split("\t");
             if (params.length >= 2) {
                 fmFile.threads.put(params[0], params[1]);
-                System.out.println(params[0] + " " + params[1]);
+//                System.out.println(params[0] + " " + params[1]);
             } else {
                 fmFile.threads.put(params[0], "unknown");
             }
@@ -173,8 +197,8 @@ public class Trace {
         while (!lists[offset].equals("*end")) {
             MethodDes m = new MethodDes();
             String params[] = lists[offset].split("\t");
-            m.setMethod(Long.parseLong(params[0].replace("0x", ""), 16));
-            m.setMethodDescriptor(params[1]);
+            m.setMethodId(Long.parseLong(params[0].replace("0x", ""), 16));
+            m.setMethodClazz(params[1]);
             m.setMethodName(params[2]);
             m.setMethodSig(params[3]);
             if (params.length == 6) {
@@ -183,11 +207,12 @@ public class Trace {
                 m.setSource(params[4]);
             }
             offset++;
-            fmFile.methods.put(m.getMethod(), m);
+            fmFile.methods.put(m.getMethodId(), m);
         }
     }
 
-    private void divideBytes(byte[] bytes) {
+
+    public void divideBytes(byte[] bytes) {
         int padding = 0;
         for (int i = 0; i < bytes.length; ++i) {
             if (bytes[i] == 'S' && bytes[i + 1] == 'L' && bytes[i + 2] == 'O' && bytes[i + 3] == 'W') {
@@ -206,4 +231,71 @@ public class Trace {
         }
     }
 
+    public Map<Long, MethodDes> getMethods() {
+        return fmFile.methods;
+    }
+
+    public void updateMethodInfo(File fl) {
+        // Java8用流的方式读文件，更加高效
+        List<clazz_info> all = new ArrayList<>();
+        try {
+            Files.lines(Paths.get(fl.getPath())).forEach(line -> {
+                Matcher m = patternClass.matcher(line);
+                if (m.matches()) {
+                    String old_class = m.group(1);
+                    String new_class = m.group(2);
+                    all.add(new clazz_info(old_class, new_class));
+                }
+                Matcher m1 = patternMothod.matcher(line);
+                if (m1.matches()) {
+                    String old_class = m1.group(1).replaceFirst("\\d+:\\d+:", "");
+                    String new_class = m1.group(2);
+                    all.get(all.size() - 1).method_infos.add(new Method_info(old_class, new_class));
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "mapping.txt按行读取失败", "文件读取失败", JOptionPane.ERROR_MESSAGE);
+        }
+
+        //修改方法中的定义
+
+        for (MethodDes value : fmFile.methods.values()) {
+            String clazz = value.getOldMethodClazz();
+            for (clazz_info info : all) {
+                if (info.new_name.equals(clazz)) {
+                    value.setMethodClazz(info.originalName);
+                    String methodName = value.getMethodName();
+                    for (Method_info info2 : info.method_infos) {
+                        if (info2.new_name.equals(methodName)) {
+                            value.setMethodName(info2.originalName);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private class clazz_info {
+        String originalName;
+        String new_name;
+        List<Method_info> method_infos = new ArrayList<>();
+
+        public clazz_info(String old_class, String new_class) {
+            originalName = old_class;
+            new_name = new_class;
+        }
+    }
+
+    private class Method_info {
+        String originalName;
+        String new_name;
+
+        public Method_info(String old_class, String new_class) {
+            originalName = old_class;
+            new_name = new_class;
+        }
+    }
 }

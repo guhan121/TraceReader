@@ -37,6 +37,7 @@ public class ThreadListExt extends JList {
         this.updateUI();
     }
 
+    @Override
     public ThreadJListModel getModel() {
         return model;
     }

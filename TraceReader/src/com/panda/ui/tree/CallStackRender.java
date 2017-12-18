@@ -15,7 +15,7 @@ public class CallStackRender extends DefaultTreeCellRenderer {
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-        System.out.println("value:" + value + "\tsel:" + sel + "\texpanded:" + expanded + "\tleaf:" + leaf + "\trow:" + row + "\thasFocus:" + hasFocus);
+//        System.out.println("value:" + value + "\tsel:" + sel + "\texpanded:" + expanded + "\tleaf:" + leaf + "\trow:" + row + "\thasFocus:" + hasFocus);
         MethodLog m = ((CallStackNode) value).getM();
         setOpaque(true);
         setForeground(Color.BLUE);

@@ -47,7 +47,7 @@ public class BytesHelper {
     	return ((long)((data[offset]&0xff)|
 				((data[offset+1]&0xff)<<8)|
 				((data[offset+2]&0xff)<<16)|
-				((data[offset+3]&0xff)<<24)))&0xffffffffl;
+				((data[offset+3]&0xff)<<24)))&0xffffffffL;
     }
     public static long read8LE(byte[] data,int offset){
     	return ((long)(data[offset]&0xff)|
@@ -57,7 +57,7 @@ public class BytesHelper {
 				((data[offset+4]&0xff)<<32)|
 				((data[offset+5]&0xff)<<40)|
 				((data[offset+6]&0xff)<<48)|
-				((data[offset+7]&0xff)<<56))&0xffffffffffffffffl;
+				((data[offset+7]&0xff)<<56))&0xffffffffffffffffL;
     }
 
 }

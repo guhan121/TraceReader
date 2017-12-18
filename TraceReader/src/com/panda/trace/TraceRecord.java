@@ -9,7 +9,7 @@ package com.panda.trace;
 public class TraceRecord {
 
     int threadId;
-    long methodValue;
+    long methodId;
     /**
      * 时间戳
      */
@@ -18,7 +18,7 @@ public class TraceRecord {
      * 时间戳
      */
     long wallClockDiff;
-    MethodDes m;
+//    MethodDes m;
     int action;
 
     public int getThreadId() {
@@ -29,12 +29,12 @@ public class TraceRecord {
         this.threadId = threadId;
     }
 
-    public long getMethodValue() {
-        return methodValue;
+    public long getMethodId() {
+        return methodId;
     }
 
-    public void setMethodValue(long methodValue) {
-        this.methodValue = methodValue;
+    public void setMethodId(long methodId) {
+        this.methodId = methodId;
     }
 
     public long getThreadClockDiff() {
@@ -69,12 +69,12 @@ public class TraceRecord {
         this.action = action;
     }
 
-    public void reNameMethod(String name) {
-        m.renameMethod(name);
-    }
-
-    public void reNameClass(String old, String name) {
-        m.renameClass(old, name);
-        m.renameSig("L" + old + ";", "L" + name + ";");
-    }
+//    public void reNameMethod(String name) {
+//        m.renameMethod(name);
+//    }
+//
+//    public void reNameClass(String old, String name) {
+//        m.renameClass(old, name);
+//        m.renameSig("L" + old + ";", "L" + name + ";");
+//    }
 }

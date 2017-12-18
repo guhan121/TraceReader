@@ -34,9 +34,13 @@ public class CallStackTree extends JTree {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // TODO Auto-generated method stub
+
                 if (e.isMetaDown()) {
+                    TreePath pathForLocation = CallStackTree.this.getPathForLocation(e.getX(), e.getY());
+                    pop.isSetAll(pathForLocation == null);
                     pop.show(e.getComponent(), e.getX(), e.getY());
-                    pop.setFocus(CallStackTree.this.getPathForLocation(e.getX(), e.getY()));
+                    CallStackTree.this.setSelectionPath(pathForLocation);
+                    pop.setFocus(pathForLocation);
                 }
             }
         });
@@ -46,10 +50,12 @@ public class CallStackTree extends JTree {
         return frame;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
@@ -82,10 +88,14 @@ public class CallStackTree extends JTree {
     }
 
     /**
-     * 展开特定的对象
+     * 搜索后,展开特定的对象
+     *
      * @param keyWord
      */
     public void extendTreeMode(String keyWord) {
+        /**
+         * 关键字未改变的时候每调用一次，表明要搜索下一个
+         */
         if (mtReg.equals(keyWord)) {
             times++;
         } else {
@@ -96,9 +106,15 @@ public class CallStackTree extends JTree {
         Enumeration<CallStackNode> enums = ROOT.preorderEnumeration();
         while (enums.hasMoreElements() && n > 0) {
             CallStackNode node = (CallStackNode) enums.nextElement();
+            TreePath path = new TreePath(node.getPath());
             if (node.getText().contains(keyWord)) {
-                this.addSelectionPath(new TreePath(node.getPath()));
+                this.addSelectionPath(path);
                 n--;
+            } else {
+                /**
+                 * 从选择列表中移除
+                 */
+                this.removeSelectionPath(path);
             }
         }
     }

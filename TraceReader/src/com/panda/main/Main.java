@@ -1,12 +1,50 @@
 package com.panda.main;
 
 import com.panda.ui.TraceFrame;
+import com.panda.util.DisplayHelper;
+
+import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Enumeration;
+
+import static com.panda.util.DisplayHelper.initFilter;
 
 public class Main {
+    public static void initGlobalFontSetting(Font fnt)
+    {
+        FontUIResource fontRes = new FontUIResource(fnt);
+        for(Enumeration keys = UIManager.getDefaults().keys(); keys.hasMoreElements();)
+        {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if(value instanceof FontUIResource)
+            {
+                UIManager.put(key, fontRes);
+            }
+        }
+    }
 
     public static void main(String[] args) throws Exception {
         // TODO Auto-generated method stub
+        // set default font for global
+//        int textFontSize = 14;
+//        Font font = new Font("微软雅黑", Font.PLAIN, textFontSize);
+//        initGlobalFontSetting(font);
+
+
+        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new TraceFrame().setVisible(true);
+//            }
+//        });
         TraceFrame fm = new TraceFrame();
+//        initFilter();
 
         //System.out.print(fl.length())
 //		byte[] bytes=BytesHelper.toByteArray("./test.trace");
@@ -57,5 +95,7 @@ public class Main {
 //		System.out.println(srm.methods.get(srm.methods.size()-1).methodName+" "+srm.methods.get(srm.methods.size()-1).record.threadClockDiff);
 
     }
+
+
 
 }

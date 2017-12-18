@@ -13,6 +13,10 @@ public class MethodLog implements Comparable {
     long threadCostTime;
     long wallCostTime;
     /**
+     * 方法自身的执行时间
+     */
+    private long exclusiveTime;
+    /**
      * 该记录的方法描述
      */
     MethodDes m;
@@ -34,35 +38,34 @@ public class MethodLog implements Comparable {
      */
     TraceRecord xit;
 
+
     public MethodLog() {
     }
 
     public MethodLog(String name) {
         this.parent = null;
         this.record = new TraceRecord();
-        this.record.m = new MethodDes();
-        this.record.m.setMethodDescriptor("");
-        this.record.m.setMethodName(name);
-        this.record.m.setMethodSig("");
-        this.record.m.setSource("unknown");
-        ;
+        m = new MethodDes();
+        this.getMethodDes().setMethodClazz("");
+        this.getMethodDes().setMethodName(name);
+        this.getMethodDes().setMethodSig("");
+        this.getMethodDes().setSource("unknown");
         this.record.action = 3;
     }
 
-    public MethodLog(TraceRecord r) {
+    public MethodLog(TraceRecord r,MethodDes m1) {
         this.record = r;
-
+        m = m1;
     }
 
     public MethodLog(String methodName, int action) {
         this.parent = null;
         this.record = new TraceRecord();
-        this.record.m = new MethodDes();
-        this.record.m.setMethodDescriptor("");
-        this.record.m.setMethodName(methodName);
-        this.record.m.setMethodSig("");
-        this.record.m.setSource("unknown");
-        ;
+        m = new MethodDes();
+        this.getMethodDes().setMethodClazz("");
+        this.getMethodDes().setMethodName(methodName);
+        this.getMethodDes().setMethodSig("");
+        this.getMethodDes().setSource("unknown");
         this.record.action = action;
 
     }
@@ -88,19 +91,23 @@ public class MethodLog implements Comparable {
     }
 
     public String getFullName() {
-        return record.m.getFullName();
+        return getMethodDes().getFullName();
+    }
+
+    public MethodDes getMethodDes() {
+        return m;
     }
 
     public String getOriginFullName() {
-        return record.m.getOriginFullName();
+        return getMethodDes().getOriginFullName();
     }
 
     public String getMethodName() {
-        return record.m.getMethodName();
+        return getMethodDes().getMethodName();
     }
 
     public String getSource() {
-        return record.m.getSource().split("\t")[0];
+        return getMethodDes().getSource().split("\t")[0];
     }
 
     public int getAction() {
@@ -142,7 +149,7 @@ public class MethodLog implements Comparable {
     }
 
     public boolean isNeedPass() {
-        if (record.m.getMethodDescriptor().startsWith("com.duowan") || record.m.getMethodDescriptor().startsWith("com.yy")) {
+        if (getMethodDes().getMethodClazz().startsWith("com.duowan") || getMethodDes().getMethodClazz().startsWith("com.yy")) {
 //            System.out.println(this.getFullName());
             return false;
         }
@@ -155,20 +162,24 @@ public class MethodLog implements Comparable {
         }
         return true;
     }
+
     public boolean isSelfNeedPass() {
-        if (record.m.getMethodDescriptor().startsWith("com.duowan") || record.m.getMethodDescriptor().startsWith("com.yy")) {
+        if (getMethodDes().getMethodClazz().startsWith("com.duowan") || getMethodDes().getMethodClazz().startsWith("com.yy")) {
 //            System.out.println(this.getFullName());
             return false;
         }
         return true;
     }
 
-    public void reNameMethod(String name) {
-        m.renameMethod(name);
+    public long getExclusiveTime() {
+        long t1 = 0;
+        for (MethodLog a : child) {
+            t1 += a.getThreadCostTime();
+        }
+        return this.getThreadCostTime() - t1;
     }
 
-    public void reNameClass(String old, String name) {
-        m.renameClass(old, name);
-        m.renameSig("L" + old + ";", "L" + name + ";");
+    public void setExclusiveTime(long exclusive_Time) {
+        this.exclusiveTime = exclusive_Time;
     }
 }

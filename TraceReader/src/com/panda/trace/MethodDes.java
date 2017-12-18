@@ -5,17 +5,17 @@ package com.panda.trace;
  * @author qiantao
  */
 public class MethodDes {
-    private long method;
-    private String methodDescriptor;
+    private long methodId;
+    private String methodClazz;
     private String methodName;
     private String methodSig;
-    private String oldMethodDescriptor;
+    private String oldMethodClazz;
     private String oldMethodName;
     private String oldMethodSig;
     private String source;
 
-    public String getOldMethodDescriptor() {
-        return oldMethodDescriptor;
+    public String getOldMethodClazz() {
+        return oldMethodClazz;
     }
 
     public String getOldMethodName() {
@@ -26,21 +26,21 @@ public class MethodDes {
         return oldMethodSig;
     }
 
-    public long getMethod() {
-        return method;
+    public long getMethodId() {
+        return methodId;
     }
 
-    public void setMethod(long method) {
-        this.method = method;
+    public void setMethodId(long id) {
+        this.methodId = id;
     }
 
-    public String getMethodDescriptor() {
-        return methodDescriptor;
+    public String getMethodClazz() {
+        return methodClazz;
     }
 
-    public void setMethodDescriptor(String methodDescriptor) {
-        this.methodDescriptor = methodDescriptor;
-        this.oldMethodDescriptor = methodDescriptor;
+    public void setMethodClazz(String methodDescriptor) {
+        this.methodClazz = methodDescriptor;
+        this.oldMethodClazz = methodDescriptor;
     }
 
     public String getMethodSig() {
@@ -70,7 +70,7 @@ public class MethodDes {
     }
 
     public void renameClass(String oldCls, String cls) {
-        this.methodDescriptor = methodDescriptor.replace(oldCls, cls);
+        this.methodClazz = methodClazz.replace(oldCls, cls);
     }
 
     public void renameSig(String oldCls, String cls) {
@@ -82,10 +82,10 @@ public class MethodDes {
     }
 
     public String getFullName() {
-        return getMethodDescriptor() + "." + getMethodName() + getMethodSig();
+        return getMethodClazz() + "." + getMethodName() + getMethodSig();
     }
 
     public String getOriginFullName() {
-        return getOldMethodDescriptor() + "." + getOldMethodName() + getOldMethodSig();
+        return getOldMethodClazz() + "." + getOldMethodName() + getOldMethodSig();
     }
 }
