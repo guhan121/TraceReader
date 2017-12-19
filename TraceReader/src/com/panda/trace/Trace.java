@@ -1,8 +1,7 @@
 package com.panda.trace;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 //File format:
 //header
@@ -236,10 +236,11 @@ public class Trace {
     }
 
     public void updateMethodInfo(File fl) {
+        int[] step = new int[]{0};
         // Java8用流的方式读文件，更加高效
         List<clazz_info> all = new ArrayList<>();
         try {
-            Files.lines(Paths.get(fl.getPath())).forEach(line -> {
+            Files.lines(Paths.get(fl.getPath())).forEach((String line) -> {
                 Matcher m = patternClass.matcher(line);
                 if (m.matches()) {
                     String old_class = m.group(1);
@@ -256,10 +257,10 @@ public class Trace {
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "mapping.txt按行读取失败", "文件读取失败", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
         //修改方法中的定义
-
         for (MethodDes value : fmFile.methods.values()) {
             String clazz = value.getOldMethodClazz();
             for (clazz_info info : all) {

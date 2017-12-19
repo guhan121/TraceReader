@@ -1,6 +1,7 @@
-package com.panda.ui;
+package com.panda.ui.methodtable;
 
 import com.panda.trace.MethodLog;
+import com.panda.ui.TraceFrame;
 import com.panda.util.DisplayHelper;
 
 import javax.swing.table.AbstractTableModel;
@@ -11,17 +12,18 @@ import java.util.List;
  * @author qiantao
  */
 public class MethodTableModel extends AbstractTableModel {
-    TraceFrame log;
+    TraceFrame frame;
 
-    List<String> header =  new ArrayList<String>(){{
+    List<String> header = new ArrayList<String>() {{
         add("序号");
         add("类");
         add("方法");
         add("总执行时间us");
         add("exclusive Time(us)");
     }};
-    public MethodTableModel(TraceFrame log) {
-        this.log = log;
+
+    public MethodTableModel(TraceFrame traceFrame) {
+        this.frame = traceFrame;
     }
 
     @Override
@@ -58,9 +60,9 @@ public class MethodTableModel extends AbstractTableModel {
     @Override
     public int getRowCount() {
         // TODO Auto-generated method stub
-        if (log.traceThreads != null) {
+        if (frame.traceThreads != null) {
             //显示当前选择的方法
-            int b = DisplayHelper.getFilterMethods(log.traceThreads).size();
+            int b = DisplayHelper.getFilterMethods(frame.traceThreads).size();
             return b;
         } else {
             return 0;
@@ -80,8 +82,8 @@ public class MethodTableModel extends AbstractTableModel {
             return rowIndex;
         } else if (columnIndex == 1) {
             //返回方法类名
-            if (log.traceThreads != null) {
-                List<MethodLog> filterMethods = DisplayHelper.getFilterMethods(log.traceThreads);
+            if (frame.traceThreads != null) {
+                List<MethodLog> filterMethods = DisplayHelper.getFilterMethods(frame.traceThreads);
                 if (filterMethods != null && filterMethods.size() != 0 && filterMethods.size() > rowIndex) {
                     String m = filterMethods.get(rowIndex).getMethodDes().getMethodClazz();
                     return m;
@@ -90,8 +92,8 @@ public class MethodTableModel extends AbstractTableModel {
             }
         } else if (columnIndex == 2) {
             //返回方法名称
-            if (log.traceThreads != null) {
-                List<MethodLog> filterMethods = DisplayHelper.getFilterMethods(log.traceThreads);
+            if (frame.traceThreads != null) {
+                List<MethodLog> filterMethods = DisplayHelper.getFilterMethods(frame.traceThreads);
                 if (filterMethods != null && filterMethods.size() != 0 && filterMethods.size() > rowIndex) {
                     String m = filterMethods.get(rowIndex).getMethodDes().getMethodName();
                     return m;
@@ -99,7 +101,7 @@ public class MethodTableModel extends AbstractTableModel {
                 return "";
             }
         } else if (columnIndex == 3) {
-            List<MethodLog> filterMethods = DisplayHelper.getFilterMethods(log.traceThreads);
+            List<MethodLog> filterMethods = DisplayHelper.getFilterMethods(frame.traceThreads);
             if (filterMethods != null && filterMethods.size() != 0 && filterMethods.size() > rowIndex) {
                 long m = filterMethods.get(rowIndex).getThreadCostTime();
                 return m;
@@ -107,7 +109,7 @@ public class MethodTableModel extends AbstractTableModel {
             return "";
         } else if (columnIndex == 4) {
             //返回方法执行时间
-            List<MethodLog> filterMethods = DisplayHelper.getFilterMethods(log.traceThreads);
+            List<MethodLog> filterMethods = DisplayHelper.getFilterMethods(frame.traceThreads);
             if (filterMethods != null && filterMethods.size() != 0 && filterMethods.size() > rowIndex) {
                 long m = filterMethods.get(rowIndex).getExclusiveTime();
                 return m;

@@ -23,6 +23,7 @@ public class CallStackTree extends JTree {
     TreePopupMenu pop;
     private CallStackModel treeModel;
     private String name;
+    private long lastIndex;
 
     public CallStackTree(TraceFrame frame) {
         this.frame = frame;
@@ -101,6 +102,7 @@ public class CallStackTree extends JTree {
         } else {
             mtReg = keyWord;
             times = 1;
+            lastIndex = 0;
         }
         int n = times;
         Enumeration<CallStackNode> enums = ROOT.preorderEnumeration();
@@ -108,14 +110,21 @@ public class CallStackTree extends JTree {
             CallStackNode node = (CallStackNode) enums.nextElement();
             TreePath path = new TreePath(node.getPath());
             if (node.getText().contains(keyWord)) {
-                this.addSelectionPath(path);
+                this.setSelectionPath(path);
+                this.scrollPathToVisible(path);
+//                this.addSelectionPath(path);
                 n--;
             } else {
                 /**
                  * 从选择列表中移除
                  */
-                this.removeSelectionPath(path);
+//                this.removeSelectionPath(path);
             }
+        }
+        if (n > 0) {
+            frame.setStatusBarTips("已经到最后一个,修改输入重新搜索");
+        } else {
+            frame.setStatusBarTips("回车键直接搜索下一个");
         }
     }
 

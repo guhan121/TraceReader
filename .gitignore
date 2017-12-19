@@ -1,0 +1,13 @@
+*.iml
+.gradle
+/local.properties
+/TraceReader/.idea/workspace.xml
+/TraceReader/.idea/libraries
+.DS_Store
+/build
+/captures
+*.class
+.externalNativeBuild
+/TraceReader/out
+*.trace
+*.txt
